@@ -41,31 +41,30 @@ router.post("/", (req, res) => {
   res.status(201);
 });
 
-/* La ruta POST  /:cid/product/:pid deberá agregar el producto al arreglo “products” del carrito seleccionado, agregándose como un objeto bajo el siguiente formato:
-product: SÓLO DEBE CONTENER EL ID DEL PRODUCTO A AGREGAR.
-quantity: debe contener el número de ejemplares de dicho producto. El producto, se agregará de uno en uno, si un pid ya existe, incrementar el campo quantity de dicho producto.  */
-
-
 router.post("/:cid/product/:pid", (req, res) => {
-    const carts = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-    const products = JSON.parse(fs.readFileSync(filePathProducts, "utf-8"));
-    const cartId = req.params.cid;
-    const productId = req.params.pid;
-    const cart = carts.find((cart) => cart.cid === parseInt(cartId));
-    const product = products.find((product) => product.pid === parseInt(productId));
-    if (cart && product) {
-        const productInCart = cart.products.find(
-        (product) => product.pid === parseInt(productId)
-        );
-        if (productInCart) {
-        productInCart.quantity++;
-        } else {
-        cart.products.push({ pid: parseInt(productId), quantity: 1 });
+    const carts = JSON.parse(fs.readFileSync(filePath, "utf-8")); 
+    const id = req.params.cid; 
+    const productId = req.params.pid; 
+    const cart = carts.find((cart) => cart.cid === parseInt(id)); 
+    const products = JSON.parse(fs.readFileSync(filePathProducts, "utf-8")); 
+    const productToAdd = products.find((product) => product.pid === parseInt(productId)); 
+    if (cart) 
+    {
+        const product = cart.products.find((product) => product.pid === parseInt(productId)); 
+        if (product) 
+        {
+            product.quantity += 1;
         }
-        fs.writeFileSync(filePath, JSON.stringify(carts));
-        res.json(cart);
-    } else {
-        res.status(404).json({ error: "Carrito o producto no encontrado" });
+        else
+        {
+            cart.products.push({pid: parseInt(productId), quantity: 1}); 
+        }
+        fs.writeFileSync(filePath, JSON.stringify(carts)); 
+        res.status(201).json(cart); 
+    }
+    else 
+    {
+        res.status(404).json({ error: "Carrito no encontrado" });
     }
 });
 

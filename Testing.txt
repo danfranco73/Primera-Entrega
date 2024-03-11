@@ -6,10 +6,10 @@ GET/:pid => http://localhost:8080/api/products/4
 POST => http://localhost:8080/api/products (uso el form-data)
 {
     "title": "Vino Don David",
-    "description": "Vino Don David Cabernet 750",
-    "code": "ddc750",
-    "price": 8900,
-    "stock": 44,
+    "description": "Vino Don David Cabernet Blanc 750",
+    "code": "ddcb750",
+    "price": 10090,
+    "stock": 66,
     "category": "Vinos",
     }
 
@@ -24,13 +24,13 @@ PUT => http://localhost:8080/api/products/4
     }
 
 
-DELETE/:pid => http://localhost:8080/api/products/4
+DELETE/:pid => http://localhost:8080/api/products/6
 
 Probamos los routers del Carrito
 
 GET/:cid => http://localhost:8080/api/cart/2
 
-POST/:cid/product/:cid => http://localhost:8080/api/carts/2/product/5
+POST/:cid/product/:pid => http://localhost:8080/api/carts/2/product/2
 
 
 
