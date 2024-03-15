@@ -3,6 +3,7 @@ import upload from "../../utilMulter.js";
 import fs from "fs";
 import __dirname from "../../utils.js";
 import path from "path";
+import ProductManager from "../managers/ProductManager.js";
 
 const filePath = path.resolve(__dirname, "./src/files/productos.json");
 
