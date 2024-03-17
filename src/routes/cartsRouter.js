@@ -1,9 +1,9 @@
 import express from "express";
 import fs from "fs";
-import __dirname from "../../utils.js";
+import __dirname from "../utils.js";
 import path from "path";
-const filePath = path.resolve(__dirname, "./src/files/carrito.json");
-const filePathProducts = path.resolve(__dirname, "./src/files/productos.json");
+const filePath = path.resolve(__dirname, "./files/carrito.json");
+const filePathProducts = path.resolve(__dirname, "./files/productos.json");
 const router = express.Router();
 
 let carts = [];

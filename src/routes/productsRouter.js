@@ -1,11 +1,11 @@
 import { Router } from "express";
-import upload from "../../utilMulter.js";
+import upload from "../utilMulter.js";
 import fs from "fs";
-import __dirname from "../../utils.js";
+import __dirname from "../utils.js";
 import path from "path";
 import ProductManager from "../managers/ProductManager.js";
 
-const filePath = path.resolve(__dirname, "./src/files/productos.json");
+const filePath = path.resolve(__dirname, "./files/productos.json");
 
 const router = Router();
 
