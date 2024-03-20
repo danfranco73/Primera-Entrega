@@ -7,94 +7,89 @@ import ProductManager from "../managers/ProductManager.js";
 
 const filePath = path.resolve(__dirname, "./files/productos.json");
 
-const productManager = new ProductManager(filePath);
+console.log(filePath); // chequeo que la ruta sea correcta
 
+const productManager = new ProductManager(filePath);
 
 const router = Router();
 
 let products = [];
 
+// uso el metodo getProducts del manager
+
 router.get("/", (req, res) => {
-    let products = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-    const {limit} = req.query
-    if(limit){
-        const limitProducts = products.slice(0,limit)
-        res.json(limitProducts)
-    } else {
-        res.json(products);
-    }
+  const limit = req.query.limit;
+  if (limit) {
+    products = productManager.getProducts().slice(0, limit);
+    res.json(products);
+  } else {
+    const products = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    res.json(products);
+  }
 });
 
+// uso el metodo getProductById del manager
 
-router.get("/:id", (req, res) => {
-    const products = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-  const id = req.params.id;
-  const product = products.find((product) => product.id === parseInt(id));
+router.get("/:pid", (req, res) => {
+  const id = req.params.pid;
+  const product = productManager.getProductById(id);
   if (product) {
     res.json(product);
   } else {
     res.status(404).json({ error: "Producto no encontrado" });
   }
-});
+} );
 
-router.post("/", upload.array("thumbnails", 5), (req, res) => {
-    const products = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-    const maxId = products.reduce((acc, product) => (product.id > acc ? product.id : acc), 0);
-    const newProductId = maxId +1;
-    const { title, description, code, price, stock, category } = req.body;
-    const newProduct = {
-        title,
-        description,
-        code,
-        price,
-        stock,
-        category,
-        status: true,
-        id: newProductId,
-        thumbnails: req.files.map((file) => file.path),
-    };
-    products.push(newProduct);
-    fs.writeFileSync(filePath, JSON.stringify(products));
-    res.json(newProduct);
-    res.status(201);
-}
-);
+// uso el metodo addProduct del manager con todos los datos que vienen en el body de la peticion 
+
+router.post("/", upload.single("image"), (req, res) => {
+  const { title, description, code, price, stock, category } = req.body;
+  const newProduct = {
+    title,
+    description,
+    code,
+    price,
+    stock,
+    category,
+    image: req.file.filename,
+  };
+  const product = productManager.addProduct(newProduct);
+  res.json(product);
+} );
 
 
-router.put("/:pid", (req, res) => {
-  const products = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+// uso el metodo updateProduct del manager, con el id que viene en la url y todos los datos que vienen en el body de la peticion
+
+router.put("/:pid", upload.single("image"), (req, res) => {
   const id = req.params.pid;
-  const index = products.findIndex((product) => product.id === parseInt(id));
-  if (index !== -1) {
-    const { title, description, code, price, stock, category } = req.body;
-    products[index] = {
-      ...products[index],
-      title,
-      description,
-      code,
-      price,
-      stock,
-      category,
-    };
-    fs.writeFileSync(filePath, JSON.stringify(products));
-    res.json(products[index]);
+  const { title, description, code, price, stock, category } = req.body;
+  const updatedProduct = {
+    title,
+    description,
+    code,
+    price,
+    stock,
+    category,
+    image: req.file.filename,
+  };
+  const product = productManager.updateProduct(id, updatedProduct);
+  if (product) {
+    res.json(product);
   } else {
     res.status(404).json({ error: "Producto no encontrado" });
   }
-});
+} );
 
+// uso el metodo deleteProduct del manager, con el id que viene en la url
 
 router.delete("/:pid", (req, res) => {
-  let products = JSON.parse(fs.readFileSync(filePath, "utf-8"));
   const id = req.params.pid;
-  const index = products.findIndex((product) => product.id === parseInt(id));
-  if (index !== -1) {
-    products = products.filter((product) => product.id !== parseInt(id));
-    fs.writeFileSync(filePath, JSON.stringify(products));
-    res.json({ message: "Producto eliminado" });
+  const deleted = productManager.deleteProduct(id);
+  if (deleted) {
+    res.json({ success: "Producto eliminado" });
   } else {
     res.status(404).json({ error: "Producto no encontrado" });
   }
-});
+} );
 
 export default router;

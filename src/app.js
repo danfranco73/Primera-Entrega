@@ -19,12 +19,9 @@ app.use(express.static(`${__dirname}/public`));
 
 app.engine(
   "handlebars",
-  handlebars.engine({
-    extname: "handlebars",
-    defaultLayout: "index.handlebars",
-  })
-);
-app.set("views", "/views");
+  handlebars.engine());
+app.set("views", __dirname + "/views");
+console.log(__dirname + "/views");
 app.set("view engine", "handlebars");
 
 const serverIO = new Server(httpServer);

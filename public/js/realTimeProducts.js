@@ -1,71 +1,59 @@
-const socket = io();
 
-const list = document.getElementById("list");
-const addProduct = document.getElementById("addProduct");
-const delProduct = document.getElementById("deleteProduct");
+document.addEventListener("DOMContentLoaded", () => {
+  const socket = io();
+  const addProductForm = document.getElementById("add-product-form");
+  const deleteProductForm = document.getElementById("delete-product-form");
+  const updateProductForm = document.getElementById("update-product-form");
+  const productsContainer = document.querySelector(".products");
 
-
-const updateList = (data) => {
-  list.innerHTML = "";
-  data.forEach((product) => {
-    const li = document.createElement("li");
-    li.textContent = `Title: ${product.title} - Price: ${product.price}`;
-    list.appendChild(li);
-  });
-};
-
-socket.on("connect", () => {
-  console.log("Connected!");
-});
-
-socket.on("disconnect", () => {
-  console.log("Disconnected!");
-});
-
-socket.on("sendProducts", (data) => {
-  updateList(data);
-});
-
-const data = []; // I use this to store the products
-
-addProduct.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const title = document.getElementById("title").value;
-  const description = document.getElementById("description").value;
-  const code = document.getElementById("code").value;
-  const stock = document.getElementById("stock").value;
-  const status = document.getElementById("status").value;
-  const price = document.getElementById("price").value;
-  const category = document.getElementById("category").value;
-  const thumbnails = document.getElementById("thumbnails").value;
-  socket.emit("newProduct", {
-    title,
-    description,
-    stock,
-    price,
-    category,
-    code,
-    status,
-    thumbnails,
-  });
-  form.reset();
-  updateList(data);
-});
-
-const formDel = document.getElementById("deleteProduct");
-formDel.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const id = document.getElementById("id").value;
-  socket.emit("deleteProduct", id);
-  formDel.reset();
-  updateList(data);
-});
-
-// delete product
-socket.on("deleteProduct", (id) => {
-  const productToDelete = data.find((product) => product.id === id);
-  if (productToDelete) {
-    data.splice(data.indexOf(productToDelete), 1);
+  if (addProductForm) {
+    addProductForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const description = document.getElementById("description").value;
+      const price = document.getElementById("price").value;
+      socket.emit("newProduct", {
+        name,
+        description,
+        price,
+      });
+    });
   }
-  updateList(data);
-});
+
+  if (deleteProductForm) {
+    deleteProductForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const id = document.getElementById("id").value;
+      socket.emit("deleteProduct", id);
+    });
+  }
+
+  if (updateProductForm) {
+    updateProductForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const id = document.getElementById("id").value;
+      const name = document.getElementById("name").value;
+      const description = document.getElementById("description").value;
+      const price = document.getElementById("price").value;
+      socket.emit("updateProduct", {
+        id,
+        name,
+        description,
+        price,
+      });
+    });
+  }
+
+  if (productsContainer) {
+    socket.on("newProduct", (product) => {
+      productsContainer.innerHTML += `
+        <div class="product">
+          <h2>${product.name}</h2>
+          <p>${product.description}</p>
+          <p>${product.price}</p>
+        </div>
+      `;
+    });
+  }
+} );
+
