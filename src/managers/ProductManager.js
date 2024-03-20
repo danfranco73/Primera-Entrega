@@ -6,7 +6,6 @@ class ProductManager {
     this.products = [];
   }
 
-  // metodo para obtener todos los productos, si coloco un archivo con productos, los lee y los devuelve, si no existe el archivo, devuelve un array vacio
 
   getProducts() {
     if (fs.existsSync(this.path)) {
@@ -21,7 +20,6 @@ class ProductManager {
     const products = this.getProducts();
     return this.products.find((product) => product.id === parseInt(id));
   }
-// metodo para agregar un producto, recibe un producto por parametro, le agrega un id y lo guarda en el archivo, ese id es unico aunque se eleiminen productos, ya que se calcula en base a la cantidad de productos que hay en el archivo y el ultimo id que se le asigno a un producto
 
   addProduct(product) {
     const products = this.getProducts();
@@ -36,7 +34,6 @@ class ProductManager {
     return newProduct;
   } 
 
- // metodo para actualizar un producto, recibe un id y un producto por parametro, busca el producto por id, lo actualiza y lo guarda en el archivo
 
   updateProduct(id, product) {
     const products = this.getProducts();
@@ -50,7 +47,6 @@ class ProductManager {
     }
   }
 
-  // metodo para eliminar un producto, recibe un id por parametro, busca el producto por id, lo elimina y guarda el archivo
 
   deleteProduct(id) {
     const products = this.getProducts();

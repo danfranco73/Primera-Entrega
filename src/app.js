@@ -17,39 +17,35 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-app.engine(
-  "handlebars",
-  handlebars.engine());
+app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
-
-const serverIO = new Server(httpServer);
-
-serverIO.on("connection", (socket) => {
-  console.log("New connection", socket.id);
-  socket.on("newProduct", (data) => {
-    console.log("New product", data);
-    serverIO.emit("newProduct", data);
-  });
-});
-
-// recibo el update y lo paso a los managers para que se actualicen los productos
-serverIO.on("connection", (socket) => {
-  console.log("New connection", socket.id);
-  socket.on("update", () => {
-    console.log("Update");
-    serverIO.emit("update");
-  });
-});
 
 app.use("/", viewsRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 
-// recibo el evento "newProduct" y lo emito a todos los clientes y lo guardo en la base de datos
+import ProductManager from "./managers/ProductManager.js";
+const productManager = new ProductManager("./file/productos.json");
 
+const serverIO = new Server(httpServer);
 
+serverIO.on("connection", (socket) => {
+  console.log("New connection", socket.id);
+  socket.emit("products", productManager.getProducts());
+  socket.on("newProduct", async (data) => {
+    await productManager.addProduct(data);
+    serverIO.emit("products", await productManager.getProducts());
+  });
 
-
+  serverIO.on("connection", (socket) => {
+    console.log("New connection", socket.id);
+    socket.emit;
+    socket.on("update", () => {
+      console.log("Update");
+      serverIO.emit("update");
+    });
+  });
+});
 
 export default serverIO;

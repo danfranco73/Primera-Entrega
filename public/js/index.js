@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const updateButton = document.getElementById("update");
   const productsContainer = document.getElementById("productsContainer");
 
-// codigo para el boton de actualizar
   if (updateButton) {
     updateButton.addEventListener("click", () => {
       socket.emit("update");

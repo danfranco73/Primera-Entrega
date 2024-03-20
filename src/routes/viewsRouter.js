@@ -20,6 +20,7 @@ serverIO.on("connection", (socket) => {
   console.log("New connection", socket.id);
   socket.on("newProduct", (data) => {
     console.log("New product", data);
+    productManager.addProduct(data);
     serverIO.emit("newProduct", data);
   });
 } );
@@ -28,9 +29,10 @@ serverIO.on("connection", (socket) => {
 // recibo el update y lo paso a los managers para que se actualicen los productos
 serverIO.on("connection", (socket) => {
   console.log("New connection", socket.id);
-  socket.on("update", () => {
+  socket.on("update", (data) => {
     console.log("Update");
-    serverIO.emit("update");
+    productManager.updateProducts(data);
+    serverIO.emit("update", data);
   });
 });
 
