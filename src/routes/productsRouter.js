@@ -7,6 +7,9 @@ import ProductManager from "../managers/ProductManager.js";
 
 const filePath = path.resolve(__dirname, "./files/productos.json");
 
+const productManager = new ProductManager(filePath);
+
+
 const router = Router();
 
 let products = [];

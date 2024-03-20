@@ -3,40 +3,42 @@ import __dirname from "./utils.js";
 import productsRouter from "./routes/productsRouter.js";
 import cartsRouter from "./routes/cartsRouter.js";
 import handlebars from "express-handlebars";
-import viewsRouter from "./views/viewsRouter.js";
+import viewsRouter from "./routes/viewsRouter.js";
 import { Server } from "socket.io";
+
 const PORT = 8080;
 const app = express();
-
-app.engine("handlebars",handlebars.engine())
-app.set("views", __dirname + "/views");
-app.set("view engine", "handlebars");
-
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.use(express.static(`${__dirname}/public`));
-
-app.use("/", viewsRouter);
-
-app.use("/api/products", productsRouter);
-app.use("/api/carts", cartsRouter);
 
 const httpServer = app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
 
-const socketServer = new Server(httpServer);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(`${__dirname}/public`));
 
-socketServer.on("connection", (socket) => {
+app.engine(
+  "handlebars",
+  handlebars.engine({
+    extname: "handlebars",
+    defaultLayout: "index.handlebars",
+  })
+);
+app.set("views", "/views");
+app.set("view engine", "handlebars");
+
+const serverIO = new Server(httpServer);
+
+serverIO.on("connection", (socket) => {
   console.log("New connection", socket.id);
   socket.on("newProduct", (data) => {
     console.log("New product", data);
-    socketServer.emit("newProduct", data);
+    serverIO.emit("newProduct", data);
   });
-}
-);
+});
 
-export default app;
+app.use("/", viewsRouter);
+app.use("/api/products", productsRouter);
+app.use("/api/carts", cartsRouter);
 
+export default serverIO;
