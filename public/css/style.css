@@ -1,0 +1,57 @@
+.box {
+    width: auto;
+    height: auto;
+    background-color: rgb(107, 107, 236);
+    margin: 10px;
+    display: inline-block;
+}
+
+.product{
+    width: auto;
+    height: auto;
+    background-color: yellow;
+    margin: 10px;
+    display: inline-block;
+}
+h1 {
+    color: blue;
+}
+
+h2 {
+    color: green;
+    
+}
+
+.add-product {
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+    margin: 10px;
+    display: inline-block;
+}
+
+.delete-product {
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    display: inline-block;
+}
+
+.update-product {
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    display: grid;
+}
+
+.container {
+    width: 100%;
+    height: auto;
+    background-color: white;
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    column-count : 3;
+    column-gap: 5px;
+    justify-content: center;
+}

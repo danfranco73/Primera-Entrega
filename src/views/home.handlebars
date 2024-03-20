@@ -1,0 +1,20 @@
+<h1>Productos del Home</h1>
+<div class="box">
+{{#each products}}
+    <div class="product">
+        <h2>Nombre: {{title}}</h2>
+        <p>Id: {{id}}</p>
+        <p>Descripción: {{description}}</p>
+        <p>Precio: {{price}}</p>
+        <p>Stock: {{stock}}</p>
+        <p>Codigo: {{code}}</p>
+        <p>Categoria: {{category}}</p>
+        <p>Imagen: {{thumbnails}}</p>
+
+    </div>
+{{/each}}
+</div>
+<button id="update-products">Actualizar</button>
+
+<script src="socket.io/socket.io.js"></script>
+<script src="js/index.js"></script>
