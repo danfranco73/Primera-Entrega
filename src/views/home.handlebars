@@ -1,7 +1,9 @@
 <h1>Productos del Home</h1>
+<button id="update-products">Actualizar</button>
+
 <div class="box">
 {{#each products}}
-    <div class="product">
+    <div class="product" id:"products-container">
         <h2>Nombre: {{title}}</h2>
         <p>Id: {{id}}</p>
         <p>Descripción: {{description}}</p>
@@ -14,7 +16,6 @@
     </div>
 {{/each}}
 </div>
-<button id="update-products">Actualizar</button>
 
 <script src="socket.io/socket.io.js"></script>
 <script src="js/index.js"></script>

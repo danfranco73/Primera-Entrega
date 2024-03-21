@@ -22,17 +22,6 @@
 		"thumbnails": []
 	},
 	{
-		"title": "Vino Altimus",
-		"description": "Vino Altimus Malbec 750",
-		"code": "alsh750",
-		"price": "8900",
-		"stock": "45",
-		"category": "Vinos",
-		"status": true,
-		"id": 3,
-		"thumbnails": []
-	},
-	{
 		"title": "Vino Don David",
 		"description": "Don David merlot 750",
 		"code": "dds750",
@@ -93,5 +82,23 @@
 		"stock": "56",
 		"category": "Vinos",
 		"id": 9
+	},
+	{
+		"title": "Vino algo 700",
+		"description": "Vino al T 700",
+		"price": "677",
+		"stock": "344",
+		"category": "Vinos",
+		"code": "askgh73",
+		"id": 12
+	},
+	{
+		"title": "Vino Torito",
+		"description": "TOrito tinto locooo",
+		"price": "400",
+		"stock": "2456",
+		"category": "Vinos",
+		"code": "slofj55sss",
+		"id": 13
 	}
 ]

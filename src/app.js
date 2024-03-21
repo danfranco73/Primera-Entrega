@@ -4,7 +4,7 @@ import productsRouter from "./routes/productsRouter.js";
 import cartsRouter from "./routes/cartsRouter.js";
 import handlebars from "express-handlebars";
 import viewsRouter from "./routes/viewsRouter.js";
-import { Server } from "socket.io";
+import { Server as socket } from "socket.io";
 
 const PORT = 8080;
 const app = express();
@@ -26,26 +26,32 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 
 import ProductManager from "./managers/ProductManager.js";
-const productManager = new ProductManager("./file/productos.json");
+const productManager = new ProductManager("src/files/productos.json");
 
-const serverIO = new Server(httpServer);
+const io = new socket(httpServer);
 
-serverIO.on("connection", (socket) => {
-  console.log("New connection", socket.id);
-  socket.emit("products", productManager.getProducts());
-  socket.on("newProduct", async (data) => {
-    await productManager.addProduct(data);
-    serverIO.emit("products", await productManager.getProducts());
+io.on("connection",  async (socket) => {
+  console.log("New connection", socket.id); // 
+
+  const products = await productManager.getProducts();
+
+  socket.emit("products", products);
+
+  socket.on("newProduct", async (product) => {
+    const newProduct = await productManager.addProduct(product);
+    io.sockets.emit("newProduct", newProduct);
   });
 
-  serverIO.on("connection", (socket) => {
-    console.log("New connection", socket.id);
-    socket.emit;
-    socket.on("update", () => {
-      console.log("Update");
-      serverIO.emit("update");
-    });
+  socket.on("deleteProduct", async (id) => {
+    const deletedProduct = await productManager.deleteProduct(id);
+    io.sockets.emit("deleteProduct", deletedProduct);
   });
+
+  socket.on("updateProduct", async (id, product) => {
+    const updatedProduct = await productManager.updateProduct(id, product);
+    io.sockets.emit("updateProduct", updatedProduct);
+  });
+  
 });
 
-export default serverIO;
+export default io;

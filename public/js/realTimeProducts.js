@@ -20,9 +20,7 @@ addProductForm.addEventListener("submit", (e) => {
     category,
     code,
   };
-  socket.emit("newProduct", {
-    product,
-  });
+  socket.emit("newProduct", product);
 });
 
 deleteProductForm.addEventListener("submit", (e) => {
@@ -38,12 +36,9 @@ updateProductForm.addEventListener("submit", (e) => {
   const description = document.getElementById("description").value;
   const price = document.getElementById("price").value;
   const product = {
-    id,
     title,
     description,
     price,
   };
-  socket.emit("updateProduct", {
-    product,
-  });
+  socket.emit("updateProduct", id, product);
 });
