@@ -1,3 +1,4 @@
+import { error } from "console";
 import fs from "fs";
 
 class ProductManager {
@@ -5,7 +6,6 @@ class ProductManager {
     this.path = filePath;
     this.products = [];
   }
-
 
   getProducts() {
     if (fs.existsSync(this.path)) {
@@ -32,21 +32,26 @@ class ProductManager {
     products.push(newProduct);
     fs.writeFileSync(this.path, JSON.stringify(products, null, "\t"));
     return newProduct;
-  } 
-
-
-  updateProduct(id, product) {
-    const products = this.getProducts();
-    const index = products.findIndex((product) => product.id === parseInt(id));
-    if (index !== -1) {
-      products[index] = { ...products[index], ...product };
-      fs.writeFileSync(this.path, JSON.stringify(products, null, "\t"));
-      return products[index];
-    } else {
-      return null;
-    }
   }
 
+  updateProduct(id, product) {
+    try {
+      const products = this.getProducts();
+      const index = products.findIndex(
+        (product) => product.id === parseInt(id)
+      );
+      if (index !== -1) {
+        products[index] = { ...products[index], ...product };
+        fs.writeFileSync(this.path, JSON.stringify(products, null, "\t"));
+        return products[index];
+      } else {
+        console.log("no se encontro el producto");
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
 
   deleteProduct(id) {
     const products = this.getProducts();
@@ -59,7 +64,6 @@ class ProductManager {
       return false;
     }
   }
-
 }
 
 export default ProductManager;

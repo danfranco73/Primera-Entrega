@@ -18,33 +18,35 @@
     </form>
   </div>
 
-  <div class="update-product">
+{{!--   <div class="update-product">
     <form id="update-product-form">
-      <input type="text" id="id" placeholder="Id del producto" />
+      <input type="number" id="id" placeholder="Id del producto" />
       <input type="text" id="title" placeholder="Nombre" />
       <input type="text" id="description" placeholder="Descripción" />
-      <input type="text" id="price" placeholder="Precio" />
-      <button type="submit">Actualizar</button>
+      <input type="number" id="price" placeholder="Precio" />
+      <button type="submit">Update</button>
     </form>
-  </div>
-</div>
+  </div>--}}
+</div> 
 
-<br />
-<h1>Productos del realTimeProducts</h1>
-<div class="box">
-  {{#each products}}
-    <div class="product">
-      <h2>Nombre: {{title}}</h2>
-      <p>Id: {{id}}</p>
-      <p>Descripción: {{description}}</p>
-      <p>Precio: {{price}}</p>
-      <p>Stock: {{stock}}</p>
-      <p>Codigo: {{code}}</p>
-      <p>Categoria: {{category}}</p>
-      <p>Imagen: {{thumbnails}}</p>
+  <br />
+  <h1>realTimeProducts</h1>
+    <div id="products-list">
+    <div class="box">
+      {{#each products}}
+        <div class="product" id:"products-container">
+         <h2>Nombre: {{title}}</h2>
+         <p>Id: {{id}}</p>
+          <p>Descripción: {{description}}</p>
+         <p>Precio: {{price}}</p>
+         <p>Stock: {{stock}}</p>
+          <p>Codigo: {{code}}</p>
+          <p>Categoria: {{category}}</p>
+          <p>Imagen: {{thumbnails}}</p>
+        </div>
+      {{/each}}
     </div>
-  {{/each}}
-</div>
+  </div>
 
 <script src="socket.io/socket.io.js"></script>
 <script src="js/realTimeProducts.js"></script>

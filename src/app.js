@@ -30,28 +30,27 @@ const productManager = new ProductManager("src/files/productos.json");
 
 const io = new socket(httpServer);
 
-io.on("connection",  async (socket) => {
-  console.log("New connection", socket.id); // 
+io.on("connection", async (socket) => {
+  console.log("New connection", socket.id); //
 
   const products = await productManager.getProducts();
 
   socket.emit("products", products);
 
   socket.on("newProduct", async (product) => {
-    const newProduct = await productManager.addProduct(product);
-    io.sockets.emit("newProduct", newProduct);
+    await productManager.addProduct(product);
+    io.sockets.emit("products", await productManager.getProducts());
   });
 
   socket.on("deleteProduct", async (id) => {
-    const deletedProduct = await productManager.deleteProduct(id);
-    io.sockets.emit("deleteProduct", deletedProduct);
+    await productManager.deleteProduct(id);
+    io.sockets.emit("products", await productManager.getProducts());
   });
 
   socket.on("updateProduct", async (id, product) => {
-    const updatedProduct = await productManager.updateProduct(id, product);
-    io.sockets.emit("updateProduct", updatedProduct);
+    await productManager.updateProduct(id, product);
+    io.sockets.emit("products", await productManager.getProducts());
   });
-  
 });
 
 export default io;
